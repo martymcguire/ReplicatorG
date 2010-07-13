@@ -953,6 +953,30 @@ public class Sanguino3GDriver extends SerialDriver
 		super.closeCollet();
 	}
 
+  public void triggerCamera() {
+		PacketBuilder pb = new PacketBuilder(MotherboardCommandCode.TOOL_COMMAND.getCode());
+    pb.add8((byte) machine.currentTool().getIndex());
+    pb.add8(ToolCommandCode.TOGGLE_CAMERA.getCode());
+		pb.add8((byte) 1); // payload length
+		pb.add8((byte) 1); // enable
+    runCommand(pb.getPacket());
+    Base.logger.log(Level.INFO,"Triggering camera...");
+
+    super.triggerCamera();
+  }
+
+  public void stopTriggeringCamera() {
+		PacketBuilder pb = new PacketBuilder(MotherboardCommandCode.TOOL_COMMAND.getCode());
+    pb.add8((byte) machine.currentTool().getIndex());
+    pb.add8(ToolCommandCode.TOGGLE_CAMERA.getCode());
+		pb.add8((byte) 1); // payload length
+		pb.add8((byte) 0); // disable
+    runCommand(pb.getPacket());
+    Base.logger.log(Level.INFO,"Stopping camera...");
+
+    super.stopTriggeringCamera();
+  }
+
 	/***************************************************************************
 	 * Pause/unpause functionality for asynchronous devices
 	 **************************************************************************/

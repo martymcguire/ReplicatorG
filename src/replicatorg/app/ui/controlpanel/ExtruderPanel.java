@@ -382,6 +382,31 @@ public class ExtruderPanel extends JPanel implements FocusListener, ActionListen
 			add(colletLabel);
 			add(colletCheck,"wrap");
 		}
+
+    // camera controls
+    if (t.hasCamera()) {
+			String cameraString = "Camera";
+			String enableString = "enable";
+			Element xml = findMappingNode(t.getXml(),"camera");
+			if (xml != null) {
+				cameraString = xml.getAttribute("name");
+				enableString = xml.getAttribute("actuated");
+			}
+			JLabel cameraLabel = new JLabel(cameraString);
+			cameraLabel.setMinimumSize(labelMinimumSize);
+			cameraLabel.setMaximumSize(labelMinimumSize);
+			cameraLabel.setPreferredSize(labelMinimumSize);
+			cameraLabel.setHorizontalAlignment(JLabel.LEFT);
+
+			JCheckBox cameraCheck = new JCheckBox(enableString);
+			cameraCheck.setName("camera-check");
+			cameraCheck.addItemListener(this);
+
+			add(cameraLabel);
+			add(cameraCheck,"wrap");
+		}
+
+
 	}
 
 	private Element findMappingNode(Node xml,String portName) {
@@ -471,6 +496,8 @@ public class ExtruderPanel extends JPanel implements FocusListener, ActionListen
 				driver.openValve();
 			else if (name.equals("collet-check"))
 				driver.openCollet();
+      else if (name.equals("camera-check"))
+        driver.triggerCamera();
 			else
 				Base.logger.warning("checkbox selected: " + source.getName());
 		} else {
@@ -488,6 +515,8 @@ public class ExtruderPanel extends JPanel implements FocusListener, ActionListen
 				driver.closeValve();
 			else if (name.equals("collet-check"))
 				driver.closeCollet();
+      else if (name.equals("camera-check"))
+        driver.stopTriggeringCamera();
 			// else
 			// System.out.println("checkbox deselected: " + source.getName());
 		}
@@ -502,6 +531,7 @@ public class ExtruderPanel extends JPanel implements FocusListener, ActionListen
 			handleChangedTextField(source);
 			source.selectAll();
 		}
+
 	}
 
 

@@ -297,6 +297,12 @@ public interface Driver {
 	public void closeCollet();
 
 	/***************************************************************************
+	 * Camera interface functions
+	 **************************************************************************/
+	public void triggerCamera();
+	public void stopTriggeringCamera();
+
+	/***************************************************************************
 	 * Pause/unpause functionality for asynchronous devices
 	 **************************************************************************/
 	public void pause();

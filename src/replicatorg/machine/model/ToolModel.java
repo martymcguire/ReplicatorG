@@ -77,6 +77,7 @@ public class ToolModel
 	protected boolean fanEnabled;
 	protected boolean valveOpen;
 	protected boolean colletOpen;
+  protected boolean triggeringCamera;
 	
 	//capabilities
 	protected boolean hasMotor = false;
@@ -88,6 +89,7 @@ public class ToolModel
 	protected boolean hasFan = false;
 	protected boolean hasValve = false;
 	protected boolean hasCollet = false;
+  protected boolean hasCamera = false;
 
 	/*************************************
 	*  Creates the model object.
@@ -125,6 +127,7 @@ public class ToolModel
 		disableFan();
 		closeValve();
 		closeCollet();
+    stopTriggeringCamera();
 	}
 	
 	//load data from xml config
@@ -233,6 +236,11 @@ public class ToolModel
 			if (Boolean.parseBoolean(n) || Integer.parseInt(n) == 1)
 				hasHeatedPlatform = true;
 		} catch (Exception e) {} //ignore boolean/integer parse errors
+    n = XML.getAttributeValue(xml, "camera");
+    try {
+      if (Boolean.parseBoolean(n) || Integer.parseInt(n) == 1)
+        hasCamera = true;
+    } catch (Exception e) {} //ignore boolean/integer parse errors
 
 		//hah, all this for a debug string... lol.
 		String result = "Loading " + type + " '" + name + "': ";
@@ -256,7 +264,8 @@ public class ToolModel
 			result += "heater, ";
 		if (hasHeatedPlatform)
 			result += "hasHeatedPlatform, ";
-		//System.out.println(result);
+    if (hasCamera)
+      result += "camera, ";
 	}
 	
 	/*************************************
@@ -500,6 +509,11 @@ public class ToolModel
 		return hasHeatedPlatform;
 	}
 
+  public boolean hasCamera()
+  {
+    return hasCamera;
+  }
+
 	/*************************************
 	*  Flood Coolant interface functions
 	*************************************/
@@ -615,10 +629,23 @@ public class ToolModel
 		return hasCollet;
 	}
 	
+	/*************************************
+	*  Camera interface functions
+	*************************************/
+  public void triggerCamera()
+  {
+    triggeringCamera = true;
+  }
+  public void stopTriggeringCamera()
+  {
+    triggeringCamera = false;
+  }
+
 	/**
 	 * Retrieve XML node. A temporary hack until we have more robust tool models.
 	 */
 	public Node getXml() {
 		return xml;
 	}
+
 }

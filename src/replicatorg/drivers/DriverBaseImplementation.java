@@ -540,6 +540,16 @@ public class DriverBaseImplementation implements Driver {
 	}
 
 	/***************************************************************************
+	 * Camera interface functions
+	 **************************************************************************/
+	public void triggerCamera() {
+		machine.currentTool().triggerCamera();
+	}
+	public void stopTriggeringCamera() {
+		machine.currentTool().stopTriggeringCamera();
+	}
+
+	/***************************************************************************
 	 * Pause/unpause functionality for asynchronous devices
 	 **************************************************************************/
 	public void pause() {
