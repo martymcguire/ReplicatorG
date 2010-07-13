@@ -557,6 +557,15 @@ public class GCodeParser {
 				// driver.setRange();
 				break;
 
+      // trigger camera
+      case 150:
+        driver.triggerCamera();
+        break;
+      // stop triggering camera
+      case 151:
+        driver.stopTriggeringCamera();
+        break;
+
 			// initialize to default state.
 			case 200:
 				driver.initialize();
