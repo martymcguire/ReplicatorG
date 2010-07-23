@@ -23,6 +23,8 @@ import java.util.Vector;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import replicatorg.app.Base;
+
 public class PluginLoader {
 	static PluginLoader instance = new PluginLoader();
 	
@@ -32,12 +34,7 @@ public class PluginLoader {
 	
 	private Vector<File> getCandidateJars() {
 		Vector<File> candidates = new Vector<File>();
-		String path = System.getProperty("user.home") +
-			File.separator +
-			".replicatorg" +
-			File.separator +
-			"plugins";
-		File dir = new File(path);
+		File dir = new File(Base.getUserDirectory(),"plugins");
 		if (dir.isDirectory()) {
 			String[] names=dir.list();
 			for (String name: names) {
@@ -75,7 +72,7 @@ public class PluginLoader {
 					// Load class
 					URL urls[] = { f.toURI().toURL() };
 					URLClassLoader cl = new URLClassLoader(urls);
-					Class c;
+					Class<?> c;
 					try {
 						c = cl.loadClass(className.trim());
 						Object o = c.newInstance();
